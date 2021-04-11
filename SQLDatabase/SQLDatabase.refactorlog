@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="60fcd627-a497-401b-a64a-cb05babb872e" ChangeDateTime="04/11/2021 11:40:50">
+    <Property Name="ElementName" Value="[dbo].[SalaryRange].[LowerAmount]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[SalaryRange]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MinAmount" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b2c71e36-423f-45c9-a9ba-c080a0116d2a" ChangeDateTime="04/11/2021 11:57:03">
+    <Property Name="ElementName" Value="[dbo].[FK_JobAlertSubscription_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[JobAlertSubscription]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_JobAlertSubscription_SalaruRamge]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0c4db27f-400d-4e58-be36-0378234f3ec5" ChangeDateTime="04/11/2021 11:57:07">
+    <Property Name="ElementName" Value="[dbo].[FK_JobAlertSubscription_SalaruRamge]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[JobAlertSubscription]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_JobAlertSubscription_SalaryRamge]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="58be6a7c-dbf6-40b8-b1e9-99763d7e84fe" ChangeDateTime="04/11/2021 11:57:13">
+    <Property Name="ElementName" Value="[dbo].[FK_JobAlertSubscription_SalaryRamge]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[JobAlertSubscription]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_JobAlertSubscription_SalaryRange]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b726ed4e-9da2-4458-9c99-1345722ebe41" ChangeDateTime="04/11/2021 12:28:46">
+    <Property Name="ElementName" Value="[dbo].[VacancyEducation].[VacancyId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[VacancyEducation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="VacancyApplicationId" />
+  </Operation>
+</Operations>
