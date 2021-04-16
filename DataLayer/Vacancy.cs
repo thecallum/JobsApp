@@ -18,17 +18,41 @@ namespace DataLayer
         {
             const int pageSize = 10;
 
-            var query = "select * from dbo.Vacancy";
+            string query;
 
             if (salaryRange != null && department != null)
-                query += " where SalaryRangeId = @SalaryRangeId and DepartmentId = @DepartmentId";
+                query = @"select * from dbo.Vacancy
+                    where SalaryRangeId = @SalaryRangeId and DepartmentId = @DepartmentId and Published = 1
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
             else if (salaryRange != null)
-                query += " where SalaryRangeId = @SalaryRangeId";
-            else if (department != null) query += " where DepartmentId = @DepartmentId";
+                query = @"select * from dbo.Vacancy
+                    where SalaryRangeId = @SalaryRangeId and Published = 1
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
+            else if (department != null)
+            {
+                query = @"select * from dbo.Vacancy
+                    where DepartmentId = @DepartmentId and Published = 1
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
 
-            query += @" Order by id
-                offset @Offset rows
-                fetch next @PageSize rows only;";
+            } else
+            {
+                query = @"select * from dbo.Vacancy
+                    where Published = 1
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
+            }
+
 
             var parameters = new
             {
@@ -63,6 +87,26 @@ namespace DataLayer
             return response;
         }
 
+        public List<VacancyModel> FindAllPublished()
+        {
+            const string query = @"select Id, JobTitle, JobDescription from dbo.Vacancy where Published = 1;";
+
+            var response = _sqlDataAccess.LoadData<VacancyModel, dynamic>(query, new { });
+
+            return response;
+        }
+
+        public List<VacancyModel> FindAllDraft()
+        {
+            const string query = @"select Id, JobTitle, JobDescription from dbo.Vacancy where Published = 0;";
+
+            var response = _sqlDataAccess.LoadData<VacancyModel, dynamic>(query, new { });
+
+            return response;
+        }
+
+
+
         public int Insert(VacancyModel vacancy, List<VacancyCustomQuestionModel> questions)
         {
             var query = @"insert into dbo.Vacancy 
@@ -91,6 +135,22 @@ namespace DataLayer
             vacancyQuestionCrud.InsertMultiple(questions, vacancyId);
 
             return vacancyId;
+        }
+
+        public void Publish(int vacancyId, bool published)
+        {
+            const string query = @"update dbo.Vacancy 
+                set Published = @Published
+                where Id = @VacancyId; ";
+
+            var parameters = new
+            {
+                Published = published ? 1 : 0,
+                VacancyId = vacancyId
+            };
+
+            _sqlDataAccess.UpdateData<dynamic>(query, parameters);
+
         }
     }
 }

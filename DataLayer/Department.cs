@@ -24,5 +24,19 @@ namespace DataLayer
 
             return response;
         }
+
+        public DepartmentModel Find(int departmentId)
+        {
+            const string query = "select * from dbo.Department where Id = @Id";
+
+            var parameters = new
+            {
+                Id = departmentId
+            };
+
+            var response = _sqlDataAccess.LoadData<DepartmentModel, dynamic>(query, parameters);
+
+            return response.FirstOrDefault();
+        }
     }
 }

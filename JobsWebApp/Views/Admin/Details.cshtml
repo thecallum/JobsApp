@@ -1,7 +1,54 @@
-﻿
+﻿@model JobsWebApp.ViewModels.Admin.DetailsViewModel
+
+
 @{
     ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
+
+<h2>
+    Status
+    <span class="badge badge-@(Model.Vacancy.Published ? "success" : "secondary")">@(Model.Vacancy.Published ? "Published" : "Draft")</span>
+</h2>
+
+<form action="/admin/publish/@Model.Vacancy.Id" method="post">
+    @if (Model.Vacancy.Published)
+    {
+        <h2>Disable Vacancy?</h2>
+
+        <p>Hide this vacancy from the listing page.</p>
+
+        <button type="submit" class="btn btn-secondary">Disable vacancy</button>
+
+        <input type="hidden" name="published" value="false">
+    }
+    else
+    {
+        <h2>Publish Vacancy?</h2>
+
+        <p>This vacancy will be visible only during the start and end date.</p>
+
+        <input type="hidden" name="published" value="true">
+
+
+        <button type="submit" class="btn btn-primary">Publish now</button>
+
+    }
+
+</form>
+
+
+<h2>Details</h2>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>Job title</strong>: @Model.Vacancy.JobTitle</li>
+    <li class="list-group-item"><strong>Description</strong>: @Model.Vacancy.JobDescription</li>
+    <li class="list-group-item"><strong>Salary range</strong>: £@Model.Vacancy.SalaryMin - £@Model.Vacancy.SalaryMax</li>
+    <li class="list-group-item"><strong>Department</strong>: @Model.Department.DepartmentName</li>
+    <li class="list-group-item"><strong>Contract type</strong>: @Model.Vacancy.ContractType</li>
+    <li class="list-group-item"><strong>Published</strong>: @Model.Vacancy.Published</li>
+    <li class="list-group-item"><strong>Start date</strong>: @Model.Vacancy.StartDate</li>
+    <li class="list-group-item"><strong>End date</strong>: @Model.Vacancy.EndDate</li>
+</ul>
 

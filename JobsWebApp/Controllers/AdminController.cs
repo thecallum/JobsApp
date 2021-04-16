@@ -1,6 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Models;
 using JobsWebApp.ViewModels;
+using JobsWebApp.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace JobsWebApp.Controllers
 
             var viewModel = new AdminControllerIndexViewMovel
             {
-                Vacancies = vacancyCrud.FindAll()
+                PublishedVacancies = vacancyCrud.FindAllPublished(),
+                DraftVacancies = vacancyCrud.FindAllDraft(),
             };
 
             return View(viewModel);
@@ -27,7 +29,30 @@ namespace JobsWebApp.Controllers
 
         public IActionResult Details(int id)
         {
-            return View();
+            var vacancyCrud = new Vacancy();
+            var departmentCrud = new Department();
+
+
+            var vacancy = vacancyCrud.FindById(id);
+
+            var viewModel = new DetailsViewModel
+            {
+                Vacancy = vacancy,
+                Department = departmentCrud.Find(vacancy.DepartmentId)
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Publish(int id, bool published)
+        {
+            // toggle publish status
+            var vacancyCrud = new Vacancy();
+
+            vacancyCrud.Publish(id, published);
+
+            return RedirectToAction("details", new { id });
         }
 
         [HttpGet]

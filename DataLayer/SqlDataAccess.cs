@@ -41,6 +41,14 @@ namespace DataLayer
             }
         }
 
+        public void UpdateData<T>(string sqlStatement, T parameters)
+        {
+            using (IDbConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Execute(sqlStatement, parameters);
+            }
+        }
+
         private static string GetConnectionString(string connectionStringName = "Default")
         {
             var builder = new ConfigurationBuilder()
