@@ -7,7 +7,5 @@
     [StartDate] DATE NOT NULL, 
     [EndDate] DATE NULL, 
     [Summary] NVARCHAR(MAX) NOT NULL, 
-    [DisplayOrder] INT NOT NULL, 
-    CONSTRAINT [FK_VacancyWorkHistory_VacancyApplication] FOREIGN KEY ([VacancyApplicationId]) REFERENCES [VacancyApplication]([Id]) ON DELETE CASCADE, 
-    CONSTRAINT [AK_VacancyWorkHistory_DisplayOrder-VacancyApplicationId] UNIQUE ([DisplayOrder], [VacancyApplicationId])
+    CONSTRAINT [FK_VacancyWorkHistory_VacancyApplication] FOREIGN KEY ([VacancyApplicationId]) REFERENCES [VacancyApplication]([Id]) ON DELETE CASCADE
 )

@@ -1,0 +1,142 @@
+﻿@model HomepageViewModel;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<style>
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    .page {
+        display: flex;
+    }
+
+    .left {
+        width: 300px;
+        background: grey;
+        padding: 15px;
+    }
+
+    .right {
+        width: calc(100% - 300px);
+        /*   background: blue; */
+    }
+
+    .select {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .job-list {
+        margin: 0;
+        padding: 0;
+        padding: 0 15px;
+    }
+
+        .job-list li {
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+
+    .job {
+        background: #f9f9f9;
+        border: solid #979797;
+        border-width: 1px 0;
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+
+    .job-title {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .job ul {
+        margin: 0;
+        padding: 0;
+        background: #0a0a0a;
+        color: #fff;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    .job li {
+        display: block;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 5px;
+    }
+
+    .job-apply {
+        background: blue;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 3px;
+        text-decoration: none;
+        display: block;
+        width: 80px;
+        text-align: center;
+    }
+</style>
+
+<div class="page">
+
+    <div class="left">
+
+
+        <form action="/" method="get">
+            <h2>Jobs</h2>
+
+            <p>ID: @Model.SalaryRange</p>
+
+            <select class="select" asp-for="SalaryRange" asp-items="Model.SalaryRanges">
+                <option value="">SalaryRange</option>
+            </select>
+
+            <select class="select" asp-for="Department" asp-items="Model.Departments">
+                <option value="">Department</option>
+            </select>
+
+            <div>
+                <button type="submit" class="apply">Apply</button>
+                <a href="/">Clear</a>
+            </div>
+
+        </form>
+
+
+    </div>
+    <div class="right">
+        @if (Model.Vacancies.Count == 0)
+        {
+            <h2>Sorry, no vacancies can be found with this filter.</h2>
+        }
+        else
+        {
+            <ul class="job-list">
+                @foreach (var vacancy in Model.Vacancies)
+                {
+                    <li>
+                        <div class="job">
+                            <h3 class="job-title">@vacancy.JobTitle</h3>
+                            <ul>
+                                <li><strong>Salary Range</strong> £32,301 to £33,474</li>
+                                <li><strong>Closing Date</strong> 19 April</li>
+                            </ul>
+                            <a href="/vacancy/details/@vacancy.Id" class="job-apply">More Details</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+
+
+    </div>
+
+</div>

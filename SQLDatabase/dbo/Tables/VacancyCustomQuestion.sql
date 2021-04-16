@@ -8,6 +8,5 @@
     [MinLength] INT NOT NULL, 
     [MaxLength] INT NOT NULL, 
     CONSTRAINT [FK_VacancyCustomQuestion_Vacancy] FOREIGN KEY ([VacancyId]) REFERENCES [Vacancy]([Id]) ON DELETE CASCADE, 
-    CONSTRAINT [AK_VacancyCustomQuestion_VacancyId-DisplayOrder] UNIQUE ([VacancyId], [DisplayOrder])
 )
 

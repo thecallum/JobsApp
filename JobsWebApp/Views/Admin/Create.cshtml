@@ -1,0 +1,108 @@
+﻿@model JobsWebApp.ViewModels.AdminControllerCreateViewModel;
+
+<h1>Create a new Vacancy</h1>
+
+<form action="/admin/create" method="post">
+
+    <fieldset>
+        <legend class="form-control-lg">Details</legend>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.JobTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.JobTitle, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.JobDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.JobDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.JobDescription, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.SalaryMin, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.SalaryMin, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.SalaryMin, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.SalaryMax, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.SalaryMax, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.SalaryMax, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.ContractType, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.ContractType, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.ContractType, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.StartDate, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.EditorFor(model => model.Vacancy.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.EndDate, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vacancy.Published, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.CheckBoxFor(model => model.Vacancy.Published, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Vacancy.Published, "", new { @class = "text-danger" })
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label for="salaryRangeSelect">Salary Range</label>
+            <select class="select form-control" asp-for="SalaryRange" asp-items="Model.SalaryRanges" id="salaryRangeSelect">
+                <option value="">SalaryRange</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.SalaryRange, "", new { @class = "text-danger" })
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="departmentSelect">Department</label>
+            <select class="select form-control" asp-for="Department" asp-items="Model.Departments" id="departmentSelect">
+                <option value="">Department</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+
+        </div>
+
+
+
+    </fieldset>
+
+
+    <fieldset>
+        <legend class="form-control-lg">Custom Questions</legend>
+
+        <div class="form-group">
+
+
+            @for (var i = 0; i < 3; i++)
+            {
+                <div class="form-group">
+                    @Html.LabelFor(model => Model.Questions[i].Question, "Question One", htmlAttributes: new { @class = "control-label" })
+                    @Html.TextAreaFor(model => Model.Questions[i].Question, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => Model.Questions[i].Question, "", new { @class = "text-danger" })
+                </div>
+            }
+
+
+        </div>
+
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+</form>

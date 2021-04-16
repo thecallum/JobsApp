@@ -11,7 +11,6 @@
     [StartDate] DATE NULL, 
     [EndDate] DATE NULL, 
     [Published] BIT NULL DEFAULT 0, 
-    CONSTRAINT [AK_Vacancy_JobTitle] UNIQUE ([JobTitle]), 
     CONSTRAINT [FK_Vacancy_SalaryRange] FOREIGN KEY ([SalaryRangeId]) REFERENCES [SalaryRange]([Id]), 
     CONSTRAINT [FK_Vacancy_Department] FOREIGN KEY ([DepartmentId]) REFERENCES [Department]([Id]) 
 )

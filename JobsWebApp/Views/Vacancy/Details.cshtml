@@ -1,0 +1,15 @@
+﻿@model DataLayer.Models.VacancyModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<p><strong>Job title</strong>: @Model.JobTitle</p>
+<p><strong>Description</strong>: @Model.JobDescription</p>
+<p><strong>Salary range</strong>: £@Model.SalaryMin - £@Model.SalaryMax</p>
+<p><strong>Contract type</strong>: @Model.ContractType</p>
+<p><strong>Closing Date</strong>: @Model.EndDate</p>
+
+<a href="/apply/create/@Model.Id">Apply</a>

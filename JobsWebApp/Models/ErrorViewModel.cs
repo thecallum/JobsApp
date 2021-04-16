@@ -1,5 +1,3 @@
-using System;
-
 namespace JobsWebApp.Models
 {
     public class ErrorViewModel

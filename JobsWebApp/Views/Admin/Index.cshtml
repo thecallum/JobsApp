@@ -1,0 +1,25 @@
+﻿@model JobsWebApp.ViewModels.AdminControllerIndexViewMovel
+
+<h1>Admin</h1>
+
+
+<h2>Current Vacancies</h2>
+
+<ul class="list-group">
+    @foreach (var vacancy in Model.Vacancies)
+    {
+        <li class="list-group-item">
+
+            <h3>@vacancy.JobTitle</h3>
+
+            <a class="btn btn-primary" asp-controller="Admin" asp-action="Details" asp-route-id="@vacancy.Id">View</a>
+        </li>
+
+    }
+
+</ul>
+
+<a class="btn btn-primary" asp-controller="Admin" asp-action="Create">Create New Vacancy</a>
+
+
+
