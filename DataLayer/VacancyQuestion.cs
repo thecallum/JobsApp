@@ -12,13 +12,13 @@ namespace DataLayer
             _sqlDataAccess = new SqlDataAccess();
         }
 
-        public List<VacancyCustomQuestionModel> FindAll()
+        public List<VacancyCustomQuestionModel> FindAll(int vacancyId)
         {
             const string query = @"select * from dbo.VacancyCustomQuestion
                 where VacancyId = @VacancyId
                 order by DisplayOrder;";
 
-            var result = _sqlDataAccess.LoadData<VacancyCustomQuestionModel, dynamic>(query, new {VacancyId = 1});
+            var result = _sqlDataAccess.LoadData<VacancyCustomQuestionModel, dynamic>(query, new {VacancyId = vacancyId });
 
             return result;
         }

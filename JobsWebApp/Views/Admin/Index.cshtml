@@ -6,6 +6,7 @@
 <h2>Current Vacancies</h2>
 
 <ul class="list-group">
+
     @foreach (var vacancy in Model.Vacancies)
     {
         <li class="list-group-item">
@@ -19,7 +20,7 @@
 
 </ul>
 
-<a class="btn btn-primary" asp-controller="Admin" asp-action="Create">Create New Vacancy</a>
+<a class="btn btn-primary mt-3" asp-controller="Admin" asp-action="Create">Create New Vacancy</a>
 
 
 

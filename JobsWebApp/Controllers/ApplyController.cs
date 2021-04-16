@@ -17,9 +17,9 @@ namespace JobsWebApp.Controllers
         {
             var educationTypes = GetAllEducationTypes();
 
-            var vacancyQiestionsCrud = new VacancyQuestion();
+            var vacancyQuestionsCrud = new VacancyQuestion();
 
-            var customQuestions = vacancyQiestionsCrud.FindAll();
+            var customQuestions = vacancyQuestionsCrud.FindAll(id);
 
 
             return View(new VacancyApplicationViewModel
@@ -33,9 +33,9 @@ namespace JobsWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int id, VacancyApplicationViewModel application)
         {
-            var vacancyQiestionsCrud = new VacancyQuestion();
+            var vacancyQuestionsCrud = new VacancyQuestion();
 
-            var customQuestions = vacancyQiestionsCrud.FindAll();
+            var customQuestions = vacancyQuestionsCrud.FindAll(id);
 
             if (!ModelState.IsValid)
             {

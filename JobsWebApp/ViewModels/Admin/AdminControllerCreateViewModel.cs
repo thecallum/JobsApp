@@ -21,7 +21,11 @@ namespace JobsWebApp.ViewModels
         [Required]
         public int? Department { get; set; }
 
-        public List<CustomQuestionViewModel> Questions { get; set; }
+        public List<CustomQuestionViewModel> Questions { get; set; } = new List<CustomQuestionViewModel>()
+        {
+            // default first item
+            new CustomQuestionViewModel()
+        };
     }
 
     public class CustomQuestionViewModel

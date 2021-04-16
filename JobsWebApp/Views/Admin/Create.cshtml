@@ -87,22 +87,57 @@
 
         <div class="form-group">
 
+            <div id="questions">
 
-            @for (var i = 0; i < 3; i++)
-            {
-                <div class="form-group">
-                    @Html.LabelFor(model => Model.Questions[i].Question, "Question One", htmlAttributes: new { @class = "control-label" })
-                    @Html.TextAreaFor(model => Model.Questions[i].Question, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => Model.Questions[i].Question, "", new { @class = "text-danger" })
-                </div>
-            }
+                @for (var i = 0; i < Model.Questions.Count; i++)
+                {
+                    <div class="form-group question">
+                        @Html.LabelFor(model => Model.Questions[i].Question, $"Question {i + 1}", htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => Model.Questions[i].Question, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => Model.Questions[i].Question, "", new { @class = "text-danger" })
+                    </div>
+                }
 
+            </div>
+
+            <button class="btn btn-secondary" type="button" id="deleteLastQuestion">Delete last question</button>
+
+            <button class="btn btn-primary" type="button" id="addQuestionButton">Add Question</button>
 
         </div>
 
     </fieldset>
 
     <button type="submit" class="btn btn-primary">Submit</button>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script>
+
+        function addQuestion() {
+            const numberOfQuestions = $('.question').length;
+            const newQuestionIndex = numberOfQuestions + 1;
+
+            const newQuestionName = `Question ${newQuestionIndex}`;
+
+            const template = `
+                <div class="form-group question">
+                    <label class="control-label" for="Questions_${newQuestionIndex -1}__Question">${newQuestionName}</label>
+                    <textarea class="form-control" name="Questions[${newQuestionIndex -1}].Question" id="Questions_${newQuestionIndex -1}__Question"></textarea>
+                </div>
+                `;
+
+            $('#questions').append(template);
+        }
+
+        function deleteLastQuestion() {
+            $('.question').last().remove();
+        }
+
+        $("#addQuestionButton").on("click", addQuestion);
+        $("#deleteLastQuestion").on("click", deleteLastQuestion);
+
+    </script>
 
 
 </form>
