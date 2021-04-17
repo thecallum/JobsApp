@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataLayer;
-using DataLayer.Models;
-using JobsWebApp.ViewModels;
+using DataLayer.BaseModels;
+using DataLayer.Crud;
+using JobsWebApp.ViewModels.Apply;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -15,11 +15,11 @@ namespace JobsWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int id)
         {
-            var educationTypes = GetAllEducationTypes();
+            var educationTypes = await GetAllEducationTypes();
 
-            var vacancyQuestionsCrud = new VacancyQuestion();
+            var vacancyQuestionsCrud = new VacancyQuestionCrud();
 
-            var customQuestions = vacancyQuestionsCrud.FindAll(id);
+            var customQuestions = await vacancyQuestionsCrud.FindAll(id);
 
 
             return View(new CreateViewModel
@@ -33,13 +33,13 @@ namespace JobsWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int id, CreateViewModel application)
         {
-            var vacancyQuestionsCrud = new VacancyQuestion();
+            var vacancyQuestionsCrud = new VacancyQuestionCrud();
 
-            var customQuestions = vacancyQuestionsCrud.FindAll(id);
+            var customQuestions = await vacancyQuestionsCrud.FindAll(id);
 
             if (!ModelState.IsValid)
             {
-                var educationTypes = GetAllEducationTypes();
+                var educationTypes = await GetAllEducationTypes();
 
                 application.EducationTypes = ConvertEducationTypesToSelectList(educationTypes);
 
@@ -50,9 +50,9 @@ namespace JobsWebApp.Controllers
                 return View(application);
             }
 
-            var applicationCrud = new Application();
+            var applicationCrud = new ApplicationCrud();
 
-            var vacancyApplication = new VacancyApplicationModel
+            var vacancyApplication = new VacancyApplicationBaseModel
             {
                 FirstName = application.VacancyApplication.FirstName,
                 LastName = application.VacancyApplication.LastName,
@@ -66,17 +66,17 @@ namespace JobsWebApp.Controllers
                 VacancyId = id
             };
 
-            var vacancyEducation = application.Education.Select(educationViewModel => new VacancyEdutationModel
+            var vacancyEducation = application.Education.Select(educationViewModel => new VacancyEducationBaseModel
                 {
-                    EducationTypeID = educationViewModel.EducationTypeId, Description = educationViewModel.Description
+                    EducationTypeId = educationViewModel.EducationTypeId, Description = educationViewModel.Description
                 })
                 .ToList();
 
-            var vacancyWorkHistory = new List<VacancyWorkHistoryModel>();
+            var vacancyWorkHistory = new List<WorkHistoryBaseModel>();
 
             foreach (var workHistory in application.WorkHistory)
                 vacancyWorkHistory.Add(
-                    new VacancyWorkHistoryModel
+                    new WorkHistoryBaseModel
                     {
                         Summary = workHistory.Summary,
                         EmployerName = workHistory.EmployerName,
@@ -85,11 +85,11 @@ namespace JobsWebApp.Controllers
                         EndDate = workHistory.EndDate
                     });
 
-            var questionAnswers = new List<FullVacancyCustomQuestionAnswerModel>();
+            var questionAnswers = new List<VacancyQuestionAnswerBaseModel>();
 
             // same order as questions
             for (var i = 0; i < customQuestions.Count; i++)
-                questionAnswers.Add(new FullVacancyCustomQuestionAnswerModel
+                questionAnswers.Add(new VacancyQuestionAnswerBaseModel
                 {
                     Answer = application.Answers[i].Answer,
                     VacancyCustomQuestionId = customQuestions[i].Id
@@ -97,10 +97,10 @@ namespace JobsWebApp.Controllers
 
             try
             {
-                applicationCrud.InsertApplication(vacancyApplication, vacancyEducation, vacancyWorkHistory,
+                await applicationCrud.InsertApplication(vacancyApplication, vacancyEducation, vacancyWorkHistory,
                     questionAnswers);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -110,21 +110,22 @@ namespace JobsWebApp.Controllers
         }
 
 
-        public async Task<IActionResult> Success()
+        public IActionResult Success()
         {
             return View();
         }
 
-        private static List<EducationTypeModel> GetAllEducationTypes()
+        private static async Task<List<EducationTypeBaseModel>> GetAllEducationTypes()
         {
-            var educationTypeCrud = new EducationType();
+            var educationTypeCrud = new EducationTypeCrud();
 
-            var educationTypes = educationTypeCrud.FindAll();
+            var educationTypes = await educationTypeCrud.FindAll();
 
             return educationTypes;
         }
 
-        private static List<SelectListItem> ConvertEducationTypesToSelectList(List<EducationTypeModel> educationTypes)
+        private static List<SelectListItem> ConvertEducationTypesToSelectList(
+            List<EducationTypeBaseModel> educationTypes)
         {
             return educationTypes.Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Name}).ToList();
         }

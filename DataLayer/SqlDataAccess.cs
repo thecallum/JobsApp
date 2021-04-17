@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 
@@ -17,21 +18,21 @@ namespace DataLayer
             _connectionString = GetConnectionString();
         }
 
-        public List<T> LoadData<T, TU>(string sqlStatement, TU parameters)
+        public async Task<List<T>> LoadData<T, TU>(string sqlStatement, TU parameters)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var rows = connection.Query<T>(sqlStatement, parameters).ToList();
+                var rows = await connection.QueryAsync<T>(sqlStatement, parameters);
 
-                return rows;
+                return rows.ToList();
             }
         }
 
-        public int SaveData<T>(string sqlStatement, T parameters, bool returnId = false)
+        public async Task<int> SaveData<T>(string sqlStatement, T parameters, bool returnId = false)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                var result = connection.Query<int>(sqlStatement, parameters);
+                var result = await connection.QueryAsync<int>(sqlStatement, parameters);
 
                 if (!returnId) return -1;
 
@@ -41,11 +42,11 @@ namespace DataLayer
             }
         }
 
-        public void UpdateData<T>(string sqlStatement, T parameters)
+        public async Task UpdateData<T>(string sqlStatement, T parameters)
         {
             using (IDbConnection connection = new SqlConnection(_connectionString))
             {
-                connection.Execute(sqlStatement, parameters);
+                await connection.ExecuteAsync(sqlStatement, parameters);
             }
         }
 

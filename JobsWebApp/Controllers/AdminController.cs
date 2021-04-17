@@ -1,46 +1,45 @@
-﻿using DataLayer;
-using DataLayer.Models;
-using JobsWebApp.ViewModels;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DataLayer.BaseModels;
+using DataLayer.CombinedCrud;
+using DataLayer.Crud;
 using JobsWebApp.ViewModels.Admin;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace JobsWebApp.Controllers
 {
     public class AdminController : Controller
-    { 
-        public IActionResult Index()
+    {
+        public async Task<IActionResult> Index()
         {
-            var vacancyCrud = new Vacancy();
+            var vacancyCrud = new VacancyCrud();
 
-            
-
-            var viewModel = new AdminControllerIndexViewMovel
+            var viewModel = new AdminControllerIndexViewModel
             {
-                PublishedVacancies = vacancyCrud.FindAllPublished(),
-                DraftVacancies = vacancyCrud.FindAllDraft(),
+                PublishedVacancies = await vacancyCrud.FindAllPublished(),
+                DraftVacancies = await vacancyCrud.FindAllDraft()
             };
 
             return View(viewModel);
         }
-        
 
-        public IActionResult Details(int id)
+
+        public async Task<IActionResult> Details(int id)
         {
-            var vacancyCrud = new Vacancy();
-            var departmentCrud = new Department();
-            var vacancyApplicationCrud = new Application();
+            var vacancyCrud = new VacancyCrud();
+            var departmentCrud = new DepartmentCrud();
+            var vacancyApplicationCrud = new ApplicationCrud();
 
 
-            var vacancy = vacancyCrud.FindById(id);
+            var vacancy = await vacancyCrud.FindById(id);
 
             var viewModel = new DetailsViewModel
             {
-                Vacancy = vacancy,
-                Department = departmentCrud.Find(vacancy.DepartmentId),
-                NumberOfApplications = vacancyApplicationCrud.Count(vacancy.Id)
+                VacancyBase = vacancy,
+                DepartmentBase = await departmentCrud.Find(vacancy.DepartmentId),
+                NumberOfApplications = await vacancyApplicationCrud.Count(vacancy.Id)
             };
 
             return View(viewModel);
@@ -50,116 +49,107 @@ namespace JobsWebApp.Controllers
         public IActionResult Publish(int id, bool published)
         {
             // toggle publish status
-            var vacancyCrud = new Vacancy();
+            var vacancyCrud = new VacancyCrud();
 
             vacancyCrud.Publish(id, published);
 
-            return RedirectToAction("details", new { id });
+            return RedirectToAction("details", new {id});
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departmentCrud = new Department();
-            var salaryRangeCrud = new SalaryRange();
+            var departmentCrud = new DepartmentCrud();
+            var salaryRangeCrud = new SalaryRangeCrud();
 
 
-
-            var departments = departmentCrud.FindAll();
-            var salaryRange = salaryRangeCrud.FindAll();
+            var departments = await departmentCrud.FindAll();
+            var salaryRange = await salaryRangeCrud.FindAll();
 
 
             var viewModel = new AdminControllerCreateViewModel
             {
-                Departments = departments.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.DepartmentName }).ToList(),
-                SalaryRanges = salaryRange.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.DisplayValue }).ToList(),
-
+                Departments = departments.Select(x => new SelectListItem
+                    {Value = x.Id.ToString(), Text = x.DepartmentName}).ToList(),
+                SalaryRanges = salaryRange
+                    .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.DisplayValue}).ToList()
             };
 
             return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(AdminControllerCreateViewModel viewModel)
+        public async Task<IActionResult> Create(AdminControllerCreateViewModel viewModel)
         {
-
             if (ModelState.IsValid == false)
             {
-                var departmentCrud = new Department();
-                var salaryRangeCrud = new SalaryRange();
+                var departmentCrud = new DepartmentCrud();
+                var salaryRangeCrud = new SalaryRangeCrud();
 
-                var departments = departmentCrud.FindAll();
-                var salaryRange = salaryRangeCrud.FindAll();
+                var departments = await departmentCrud.FindAll();
+                var salaryRange = await salaryRangeCrud.FindAll();
 
-                viewModel.Departments = departments.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.DepartmentName }).ToList();
-                viewModel.SalaryRanges = salaryRange.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.DisplayValue }).ToList();
+                viewModel.Departments = departments.Select(x => new SelectListItem
+                    {Value = x.Id.ToString(), Text = x.DepartmentName}).ToList();
+                viewModel.SalaryRanges = salaryRange
+                    .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.DisplayValue}).ToList();
 
                 return View(viewModel);
             }
 
             // insert application
 
-            var vacancyModel = new VacancyModel
+            var vacancyModel = new VacancyBaseModel
             {
                 JobTitle = viewModel.Vacancy.JobTitle,
                 JobDescription = viewModel.Vacancy.JobDescription,
                 SalaryMin = viewModel.Vacancy.SalaryMin,
                 SalaryMax = viewModel.Vacancy.SalaryMax,
-                SalaryRangeId = (int)viewModel.SalaryRange,
-                DepartmentId = (int)viewModel.Department,
+                SalaryRangeId = (int) viewModel.SalaryRange,
+                // DepartmentId = (int) viewModel.Department,
                 ContractType = viewModel.Vacancy.ContractType,
                 StartDate = viewModel.Vacancy.StartDate,
                 EndDate = viewModel.Vacancy.EndDate,
                 Published = viewModel.Vacancy.Published
-
             };
 
-            var questionModels = new List<VacancyCustomQuestionModel>();
+            var questionModels = new List<VacancyQuestionBaseModel>();
 
-            foreach(var question in viewModel.Questions)
-            {
-                questionModels.Add(new VacancyCustomQuestionModel {
+            foreach (var question in viewModel.Questions)
+                questionModels.Add(new VacancyQuestionBaseModel
+                {
                     Question = question.Question,
                     IsRequired = question.IsRequired,
                     MinLength = question.MinLength,
                     MaxLength = question.MaxLength,
                     DisplayOrder = question.DisplayOrder
                 });
-            }
 
-            var vacancyCrud = new Vacancy();
+            var vacancyCrud = new VacancyCrud();
 
             var vacancyId = vacancyCrud.Insert(vacancyModel, questionModels);
 
             return Redirect($"/admin/details/{vacancyId}");
         }
 
-        [Route("Admin/Applications/{id:int}/{applicantId?}")]
-        public IActionResult Applications(int id, int applicantId = 0)
+        [Route("Admin/Applications/{vacancyId:int}/{applicantId:int?}")]
+        public async Task<IActionResult> Applications(int vacancyId, int applicantId = 0)
         {
-            var vacancyCrud = new Vacancy();
-            var applicationCrud = new Application();
-            var educationCrud = new ApplicationEducation();
-            var workHistoryCrud = new ApplicationWorkHistory();
+            var vacancyCrud = new VacancyCrud();
+            var applicationCrud = new ApplicationCrud();
 
-            var viewModel = new ApplicationsViewModel { 
-                Vacancy = vacancyCrud.FindById(id),
-                Applications = applicationCrud.FindAll(id)
+            var viewModel = new ApplicationsViewModel
+            {
+                Vacancy = await vacancyCrud.FindById(vacancyId),
+                Applications = await applicationCrud.FindAll(vacancyId)
             };
 
             if (applicantId != 0)
             {
-                var questionAnswerCrud = new ApplicationQuestionAnswer();
+                var applicantCrud = new FullVacancyApplicantCrud();
 
-                var applicant = new FullVacancyApplicationModel
-                {
-                    VacancyApplication = applicationCrud.Find(id, applicantId),
-                    QuestionAnswers = questionAnswerCrud.FindAll(id, applicantId),
-                    Education = educationCrud.FindAll(applicantId),
-                    WorkHistory = workHistoryCrud.FindAll(applicantId)
-                };
 
-                viewModel.Applicant = applicant;
+                viewModel.Applicant = await applicantCrud.Find(vacancyId, applicantId);
             }
 
             return View(viewModel);

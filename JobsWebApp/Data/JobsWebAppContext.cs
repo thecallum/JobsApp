@@ -1,4 +1,4 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.BaseModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobsWebApp.Data
@@ -10,6 +10,6 @@ namespace JobsWebApp.Data
         {
         }
 
-        public DbSet<VacancyModel> VacancyModel { get; set; }
+        public DbSet<VacancyBaseModel> VacancyModel { get; set; }
     }
 }

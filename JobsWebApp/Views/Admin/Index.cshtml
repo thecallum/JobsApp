@@ -1,4 +1,4 @@
-﻿@model JobsWebApp.ViewModels.AdminControllerIndexViewMovel
+﻿@model JobsWebApp.ViewModels.Admin.AdminControllerIndexViewModel
 
 <h1>Admin</h1>
 
@@ -22,7 +22,6 @@ else
 
                 <a class="btn btn-primary" asp-controller="Admin" asp-action="Details" asp-route-id="@vacancy.Id">View</a>
             </li>
-
         }
 
     </ul>
@@ -43,11 +42,7 @@ else
 
                 <a class="btn btn-primary" asp-controller="Admin" asp-action="Details" asp-route-id="@vacancy.Id">View</a>
             </li>
-
         }
 
     </ul>
 }
-
-
-

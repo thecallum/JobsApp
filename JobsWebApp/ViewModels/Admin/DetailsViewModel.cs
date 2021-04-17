@@ -1,16 +1,12 @@
-﻿using DataLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DataLayer.BaseModels;
 
 namespace JobsWebApp.ViewModels.Admin
 {
     public class DetailsViewModel
     {
-        public VacancyModel Vacancy { get; set; }
+        public VacancyBaseModel VacancyBase { get; set; }
 
-        public DepartmentModel Department { get; set; }
+        public DepartmentBaseModel DepartmentBase { get; set; }
 
         public int NumberOfApplications { get; set; }
     }

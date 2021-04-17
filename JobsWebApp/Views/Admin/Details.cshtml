@@ -8,11 +8,11 @@
 
 <h2>
     Status
-    <span class="badge badge-@(Model.Vacancy.Published ? "success" : "secondary")">@(Model.Vacancy.Published ? "Published" : "Draft")</span>
+    <span class="badge badge-@(Model.VacancyBase.Published ? "success" : "secondary")">@(Model.VacancyBase.Published ? "Published" : "Draft")</span>
 </h2>
 
-<form action="/admin/publish/@Model.Vacancy.Id" method="post">
-    @if (Model.Vacancy.Published)
+<form action="/admin/publish/@Model.VacancyBase.Id" method="post">
+    @if (Model.VacancyBase.Published)
     {
         <h2>Disable Vacancy?</h2>
         <p>Hide this vacancy from the listing page.</p>
@@ -35,28 +35,28 @@
 
 <dl class="row">
     <dt class="col-sm-12 col-md-3">Job title</dt>
-    <dd class="col-sm-12 col-md-9">@Model.Vacancy.JobTitle</dd>
+    <dd class="col-sm-12 col-md-9">@Model.VacancyBase.JobTitle</dd>
 
     <dt class="col-sm-12 col-md-3">Description</dt>
-    <dd class="col-sm-12 col-md-9">@Model.Vacancy.JobDescription</dd>
+    <dd class="col-sm-12 col-md-9">@Model.VacancyBase.JobDescription</dd>
 
     <dt class="col-sm-12 col-md-3">Salary range</dt>
-    <dd class="col-sm-12 col-md-9">£@Model.Vacancy.SalaryMin - £@Model.Vacancy.SalaryMax</dd>
+    <dd class="col-sm-12 col-md-9">£@Model.VacancyBase.SalaryMin - £@Model.VacancyBase.SalaryMax</dd>
 
     <dt class="col-sm-12 col-md-3">Department</dt>
-    <dd class="col-sm-12 col-md-9">@Model.Department.DepartmentName</dd>
+    <dd class="col-sm-12 col-md-9">@Model.DepartmentBase.DepartmentName</dd>
 
     <dt class="col-sm-12 col-md-3">Contract type</dt>
-    <dd class="col-sm-12 col-md-9">@Model.Vacancy.ContractType</dd>
+    <dd class="col-sm-12 col-md-9">@Model.VacancyBase.ContractType</dd>
 
     <dt class="col-sm-12 col-md-3">Published</dt>
-    <dd class="col-sm-12 col-md-9">@Model.Vacancy.Published</dd>
+    <dd class="col-sm-12 col-md-9">@Model.VacancyBase.Published</dd>
 
     @{
-        DateTime startDate = (DateTime)Model.Vacancy.StartDate;
+        var startDate = (DateTime) Model.VacancyBase.StartDate;
         var formattedStartDate = startDate.ToString("dddd dd MMMM yyyy");
 
-        DateTime endDate = (DateTime)Model.Vacancy.EndDate;
+        var endDate = (DateTime) Model.VacancyBase.EndDate;
         var formattedEndDate = endDate.ToString("dddd dd MMMM yyyy");
     }
 
@@ -71,4 +71,4 @@
 
 <p><strong>Total</strong>: @Model.NumberOfApplications</p>
 
-<a class="btn btn-primary" href="/admin/applications/@Model.Vacancy.Id">View Applications</a>
+<a class="btn btn-primary" href="/admin/applications/@Model.VacancyBase.Id">View Applications</a>

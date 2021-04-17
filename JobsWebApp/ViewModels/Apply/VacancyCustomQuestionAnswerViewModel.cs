@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JobsWebApp.ViewModels
+namespace JobsWebApp.ViewModels.Apply
 {
     public class VacancyCustomQuestionAnswerViewModel
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using DataLayer.Models;
+using DataLayer.BaseModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace JobsWebApp.ViewModels
+namespace JobsWebApp.ViewModels.Apply
 {
     public class CreateViewModel
     {
@@ -17,9 +17,8 @@ namespace JobsWebApp.ViewModels
 
         public List<VacancyWorkHistoryViewModel> WorkHistory { get; set; }
 
-        public List<VacancyCustomQuestionModel> Questions { get; set; }
+        public List<VacancyQuestionBaseModel> Questions { get; set; }
 
         public List<VacancyCustomQuestionAnswerViewModel> Answers { get; set; }
     }
-
 }
