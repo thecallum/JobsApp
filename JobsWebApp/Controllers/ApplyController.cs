@@ -15,6 +15,15 @@ namespace JobsWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int id)
         {
+            var vacancyCrud = new VacancyCrud();
+            var vacancy = await vacancyCrud.FindById(id);
+            if (vacancy == null)
+            {
+                Response.StatusCode = 404;
+                return View("VacancyNotFound");
+            }
+            
+            
             var educationTypes = await GetAllEducationTypes();
 
             var vacancyQuestionsCrud = new VacancyQuestionCrud();
@@ -33,6 +42,15 @@ namespace JobsWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int id, CreateViewModel application)
         {
+            var vacancyCrud = new VacancyCrud();
+            var vacancy = await vacancyCrud.FindById(id);
+            if (vacancy == null)
+            {
+                Response.StatusCode = 404;
+                return View("VacancyNotFound");
+
+            }
+            
             var vacancyQuestionsCrud = new VacancyQuestionCrud();
 
             var customQuestions = await vacancyQuestionsCrud.FindAll(id);
