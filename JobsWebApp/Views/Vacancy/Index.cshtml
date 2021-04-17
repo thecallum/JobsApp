@@ -50,12 +50,17 @@
                                         
                                         <dl class="row">
                                             <dt class="col-sm-12 col-md-3">Salary Range</dt>
-                                            <dd class="col-sm-12 col-md-9">£32,301 to £33,474</dd>
+                                            <dd class="col-sm-12 col-md-9">£@vacancy.SalaryMin - £@vacancy.SalaryMax</dd>
                                         </dl>
+                                        
+                                            @{
+                                                var endDate = (DateTime) vacancy.EndDate;
+                                                var formattedEndDate = endDate.ToString("dddd dd MMMM yyyy");
+                                            }
                                         
                                         <dl class="row">
                                             <dt class="col-sm-12 col-md-3">Closing Date</dt>
-                                            <dd class="col-sm-12 col-md-9">19 April</dd>
+                                            <dd class="col-sm-12 col-md-9">@formattedEndDate</dd>
                                         </dl>
                                         
                                         <a class="btn btn-primary" href="/vacancy/details/@vacancy.Id" class="job-apply">More Details</a>
