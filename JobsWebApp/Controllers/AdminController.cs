@@ -31,6 +31,7 @@ namespace JobsWebApp.Controllers
         {
             var vacancyCrud = new Vacancy();
             var departmentCrud = new Department();
+            var vacancyApplicationCrud = new Application();
 
 
             var vacancy = vacancyCrud.FindById(id);
@@ -38,7 +39,8 @@ namespace JobsWebApp.Controllers
             var viewModel = new DetailsViewModel
             {
                 Vacancy = vacancy,
-                Department = departmentCrud.Find(vacancy.DepartmentId)
+                Department = departmentCrud.Find(vacancy.DepartmentId),
+                NumberOfApplications = vacancyApplicationCrud.Count(vacancy.Id)
             };
 
             return View(viewModel);
@@ -130,6 +132,37 @@ namespace JobsWebApp.Controllers
             var vacancyId = vacancyCrud.Insert(vacancyModel, questionModels);
 
             return Redirect($"/admin/details/{vacancyId}");
+        }
+
+        [Route("Admin/Applications/{id:int}/{applicantId?}")]
+        public IActionResult Applications(int id, int applicantId = 0)
+        {
+            var vacancyCrud = new Vacancy();
+            var applicationCrud = new Application();
+            var educationCrud = new ApplicationEducation();
+            var workHistoryCrud = new ApplicationWorkHistory();
+
+            var viewModel = new ApplicationsViewModel { 
+                Vacancy = vacancyCrud.FindById(id),
+                Applications = applicationCrud.FindAll(id)
+            };
+
+            if (applicantId != 0)
+            {
+                var questionAnswerCrud = new ApplicationQuestionAnswer();
+
+                var applicant = new FullVacancyApplicationModel
+                {
+                    VacancyApplication = applicationCrud.Find(id, applicantId),
+                    QuestionAnswers = questionAnswerCrud.FindAll(id, applicantId),
+                    Education = educationCrud.FindAll(applicantId),
+                    WorkHistory = workHistoryCrud.FindAll(applicantId)
+                };
+
+                viewModel.Applicant = applicant;
+            }
+
+            return View(viewModel);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace DataLayer
             _sqlDataAccess = new SqlDataAccess();
         }
 
-        public void InsertMultiple(IEnumerable<VacancyCustomQuestionAnswerModel> questionAnswers,
+        public void InsertMultiple(IEnumerable<FullVacancyCustomQuestionAnswerModel> questionAnswers,
             int vacancyApplicationId)
         {
             const string query = @"insert into dbo.VacancyCustomQuestionAnswer
@@ -24,7 +24,7 @@ namespace DataLayer
                 var parameters = new
                 {
                     VacancyApplicationId = vacancyApplicationId,
-                    VacancyCustomQuestionId = answer.VacancyApplicationId,
+                    VacancyCustomQuestionId = answer.VacancyCustomQuestionId,
                     answer.Answer
                 };
 

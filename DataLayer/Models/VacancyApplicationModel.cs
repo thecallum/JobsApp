@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.Models
 {
@@ -8,18 +9,24 @@ namespace DataLayer.Models
 
         public int VacancyId { get; set; }
 
-        [Required] [MaxLength(50)] public string AddressLine1 { get; set; }
+        public string AddressLine1 { get; set; }
 
-        [MaxLength(50)] public string AddressLine2 { get; set; }
+        public string AddressLine2 { get; set; }
 
-        [MaxLength(50)] public string AddressLine3 { get; set; }
+        public string AddressLine3 { get; set; }
 
-        [MaxLength(50)] public string AddressLine4 { get; set; }
+        public string AddressLine4 { get; set; }
 
-        [Required] [MaxLength(50)] public string PostCode { get; set; }
+        public string PostCode { get; set; }
 
-        [Required] [MaxLength(50)] public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
-        [Required] [MaxLength(50)] public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+
     }
+
+    
 }

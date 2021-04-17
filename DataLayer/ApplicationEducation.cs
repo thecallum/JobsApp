@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DataLayer.Models;
+using DataLayer.CombinedModels;
 
 namespace DataLayer
 {
@@ -30,6 +31,23 @@ namespace DataLayer
 
                 _sqlDataAccess.SaveData<dynamic>(query, parameters);
             }
+        }
+
+        public List<VacancyApplicationEducationCombinedModel> FindAll(int applicationId)
+        {
+            const string query = @"select t.Name as Type, e.Description
+                from dbo.VacancyEducation e
+                left join dbo.EducationType t on e.EducationTypeId = t.Id 
+                where e.VacancyApplicationId = @ApplicationId";
+
+            var parameters = new
+            {
+                ApplicationId = applicationId
+            };
+
+            var result = _sqlDataAccess.LoadData<VacancyApplicationEducationCombinedModel, dynamic>(query, parameters);
+
+            return result;
         }
     }
 }

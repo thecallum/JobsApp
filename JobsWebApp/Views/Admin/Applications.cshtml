@@ -1,0 +1,131 @@
+﻿@model JobsWebApp.ViewModels.Admin.ApplicationsViewModel;
+
+
+    <h1>Applications</h1>
+    <p><strong>Job title</strong>: Junior Web Developer 2</p>
+    <p><strong>Number of applications</strong>: 4</p>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 bg-light p-3">
+            <h2>Applicants</h2>
+
+            <ul class="list-group">
+
+                @for (var i = 0; i < Model.Applications.Count; i++)
+                {
+                <a href="/admin/applications/@Model.Vacancy.Id/@Model.Applications[i].Id" 
+                   class="list-group-item list-group-item-action @(Model.Applications[i].Id == Model.Applicant?.VacancyApplication.Id ? "active" : "") "
+                   >
+                    @Model.Applications[i].FirstName @Model.Applications[i].LastName
+                </a>
+
+                }
+
+
+            </ul>
+        </div>
+        <div class="col-sm-12 col-md-8">
+            <h2>Details</h2>
+
+            @if (Model.Applicant == null)
+            {
+                <p>Please select an applicant.</p>
+            }
+            else
+            {
+        <dl class="row">
+
+            <dt class="col-sm-12 col-md-3">Full name </dt>
+            <dd class="col-sm-12 col-md-9">@Model.Applicant.VacancyApplication.FirstName @Model.Applicant.VacancyApplication.LastName</dd>
+
+
+            <dt class="col-sm-12 col-md-3">Email address</dt>
+            <dd class="col-sm-12 col-md-9">@Model.Applicant.VacancyApplication.EmailAddress</dd>
+
+
+            <dt class="col-sm-12 col-md-3">Phone number</dt>
+            <dd class="col-sm-12 col-md-9">@Model.Applicant.VacancyApplication.PhoneNumber</dd>
+        </dl>
+
+                <h3>Answers</h3>
+
+                <dl class="row">
+
+                    @foreach (var q in Model.Applicant.QuestionAnswers)
+                    {
+                        <dt class="col-sm-12 col-md-3">@q.Question</dt>
+                        <dd class="col-sm-12 col-md-9">@q.Answer</dd>
+                    }
+                </dl>
+
+                <h3>Education</h3>
+
+                <dl class="row">
+
+                    @foreach (var e in Model.Applicant.Education)
+                    {
+                        <dt class="col-sm-12 col-md-3">@e.Type</dt>
+                        <dd class="col-sm-12 col-md-9">@e.Description</dd>
+                    }
+                </dl>
+
+                <h3>Work History</h3>
+
+
+                <ul class="list-group">
+
+                    @foreach (var work in Model.Applicant.WorkHistory)
+                    {
+                    <li class="list-group-item">
+                        <dl class="row">
+                            <dt class="col-sm-12 col-md-3">Job title</dt>
+                            <dd class="col-sm-12 col-md-9">@work.JobTitle</dd>
+                        </dl>
+
+                        <dl class="row">
+                            <dt class="col-sm-12 col-md-3">Employer name</dt>
+                            <dd class="col-sm-12 col-md-9">@work.EmployerName</dd>
+                        </dl>
+
+
+                        @{
+                            DateTime startDate = (DateTime)work.StartDate;
+                            var formattedStartDate = startDate.ToString("dddd dd MMMM yyyy");
+
+                            DateTime endDate = (DateTime)work.EndDate;
+                            var formattedEndDate = endDate.ToString("dddd dd MMMM yyyy");
+                        }
+
+                        <dl class="row">
+                            <dt class="col-sm-12 col-md-3">Start date</dt>
+                            <dd class="col-sm-12 col-md-9">@formattedStartDate</dd>
+                        </dl>
+
+                        <dl class="row">
+                            <dt class="col-sm-12 col-md-3">End date</dt>
+                            <dd class="col-sm-12 col-md-9">@formattedEndDate</dd>
+                        </dl>
+
+                        <dl class="row">
+                            <dt class="col-sm-12 col-md-3">Summary</dt>
+                            <dd class="col-sm-12 col-md-9">@work.Summary</dd>
+                        </dl>
+
+                    </li>
+
+                    }
+
+
+                </ul>
+
+
+            }
+
+
+
+        </div>
+    </div>
+
+
+
+    

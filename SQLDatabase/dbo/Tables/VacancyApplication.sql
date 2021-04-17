@@ -9,5 +9,7 @@
     [PostCode] VARCHAR(10) NOT NULL, 
     [PhoneNumber] VARCHAR(20) NOT NULL, 
     [EmailAddress] NVARCHAR(100) NOT NULL, 
+    [FirstName] VARCHAR(50) NOT NULL, 
+    [LastName] VARCHAR(50) NOT NULL, 
     CONSTRAINT [FK_VacancyApplication_Vacancy] FOREIGN KEY ([VacancyId]) REFERENCES [Vacancy]([Id]) ON DELETE CASCADE
 )

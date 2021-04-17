@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JobsWebApp.ViewModels
 {
-    public class VacancyApplicationViewModel
+    public class CreateViewModel
     {
         public int Id { get; set; }
 
 
-        public VacancyApplicationModel VacancyApplication { get; set; }
+        public VacancyApplicationViewModel VacancyApplication { get; set; }
 
         public List<VacancyEducationViewModel> Education { get; set; }
 
@@ -21,4 +21,5 @@ namespace JobsWebApp.ViewModels
 
         public List<VacancyCustomQuestionAnswerViewModel> Answers { get; set; }
     }
+
 }

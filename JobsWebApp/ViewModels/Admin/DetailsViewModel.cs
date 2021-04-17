@@ -11,5 +11,7 @@ namespace JobsWebApp.ViewModels.Admin
         public VacancyModel Vacancy { get; set; }
 
         public DepartmentModel Department { get; set; }
+
+        public int NumberOfApplications { get; set; }
     }
 }

@@ -34,5 +34,20 @@ namespace DataLayer
                 _sqlDataAccess.SaveData<dynamic>(query, parameters);
             }
         }
+
+        public List<VacancyWorkHistoryModel> FindAll(int vacancyId)
+        {
+            const string query = @"select JobTitle, EmployerName, Summary, StartDate, EndDate
+                from dbo.VacancyWorkHistory
+                where VacancyApplicationId = @VacancyId;";
+
+            var parameters = new
+            {
+                VacancyId = vacancyId
+            };
+
+            var result = _sqlDataAccess.LoadData<VacancyWorkHistoryModel, dynamic>(query, parameters);
+            return result;
+        }
     }
 }

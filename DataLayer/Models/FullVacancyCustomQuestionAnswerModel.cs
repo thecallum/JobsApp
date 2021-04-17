@@ -1,6 +1,6 @@
 ﻿namespace DataLayer.Models
 {
-    public class VacancyCustomQuestionAnswerModel
+    public class FullVacancyCustomQuestionAnswerModel
     {
         public int Id { get; set; }
         public int VacancyApplicationId { get; set; }

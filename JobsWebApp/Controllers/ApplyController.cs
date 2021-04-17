@@ -22,7 +22,7 @@ namespace JobsWebApp.Controllers
             var customQuestions = vacancyQuestionsCrud.FindAll(id);
 
 
-            return View(new VacancyApplicationViewModel
+            return View(new CreateViewModel
             {
                 Id = id,
                 EducationTypes = ConvertEducationTypesToSelectList(educationTypes),
@@ -31,7 +31,7 @@ namespace JobsWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(int id, VacancyApplicationViewModel application)
+        public async Task<IActionResult> Create(int id, CreateViewModel application)
         {
             var vacancyQuestionsCrud = new VacancyQuestion();
 
@@ -54,6 +54,8 @@ namespace JobsWebApp.Controllers
 
             var vacancyApplication = new VacancyApplicationModel
             {
+                FirstName = application.VacancyApplication.FirstName,
+                LastName = application.VacancyApplication.LastName,
                 AddressLine1 = application.VacancyApplication.AddressLine1,
                 AddressLine2 = application.VacancyApplication.AddressLine2,
                 AddressLine3 = application.VacancyApplication.AddressLine3,
@@ -83,11 +85,11 @@ namespace JobsWebApp.Controllers
                         EndDate = workHistory.EndDate
                     });
 
-            var questionAnswers = new List<VacancyCustomQuestionAnswerModel>();
+            var questionAnswers = new List<FullVacancyCustomQuestionAnswerModel>();
 
             // same order as questions
             for (var i = 0; i < customQuestions.Count; i++)
-                questionAnswers.Add(new VacancyCustomQuestionAnswerModel
+                questionAnswers.Add(new FullVacancyCustomQuestionAnswerModel
                 {
                     Answer = application.Answers[i].Answer,
                     VacancyCustomQuestionId = customQuestions[i].Id

@@ -1,6 +1,5 @@
 ﻿@model JobsWebApp.ViewModels.Admin.DetailsViewModel
 
-
 @{
     ViewData["Title"] = "Details";
 }
@@ -16,9 +15,7 @@
     @if (Model.Vacancy.Published)
     {
         <h2>Disable Vacancy?</h2>
-
         <p>Hide this vacancy from the listing page.</p>
-
         <button type="submit" class="btn btn-secondary">Disable vacancy</button>
 
         <input type="hidden" name="published" value="false">
@@ -26,29 +23,52 @@
     else
     {
         <h2>Publish Vacancy?</h2>
-
         <p>This vacancy will be visible only during the start and end date.</p>
-
-        <input type="hidden" name="published" value="true">
-
-
         <button type="submit" class="btn btn-primary">Publish now</button>
 
+        <input type="hidden" name="published" value="true">
     }
 
 </form>
 
-
 <h2>Details</h2>
 
-<ul class="list-group">
-    <li class="list-group-item"><strong>Job title</strong>: @Model.Vacancy.JobTitle</li>
-    <li class="list-group-item"><strong>Description</strong>: @Model.Vacancy.JobDescription</li>
-    <li class="list-group-item"><strong>Salary range</strong>: £@Model.Vacancy.SalaryMin - £@Model.Vacancy.SalaryMax</li>
-    <li class="list-group-item"><strong>Department</strong>: @Model.Department.DepartmentName</li>
-    <li class="list-group-item"><strong>Contract type</strong>: @Model.Vacancy.ContractType</li>
-    <li class="list-group-item"><strong>Published</strong>: @Model.Vacancy.Published</li>
-    <li class="list-group-item"><strong>Start date</strong>: @Model.Vacancy.StartDate</li>
-    <li class="list-group-item"><strong>End date</strong>: @Model.Vacancy.EndDate</li>
-</ul>
+<dl class="row">
+    <dt class="col-sm-12 col-md-3">Job title</dt>
+    <dd class="col-sm-12 col-md-9">@Model.Vacancy.JobTitle</dd>
 
+    <dt class="col-sm-12 col-md-3">Description</dt>
+    <dd class="col-sm-12 col-md-9">@Model.Vacancy.JobDescription</dd>
+
+    <dt class="col-sm-12 col-md-3">Salary range</dt>
+    <dd class="col-sm-12 col-md-9">£@Model.Vacancy.SalaryMin - £@Model.Vacancy.SalaryMax</dd>
+
+    <dt class="col-sm-12 col-md-3">Department</dt>
+    <dd class="col-sm-12 col-md-9">@Model.Department.DepartmentName</dd>
+
+    <dt class="col-sm-12 col-md-3">Contract type</dt>
+    <dd class="col-sm-12 col-md-9">@Model.Vacancy.ContractType</dd>
+
+    <dt class="col-sm-12 col-md-3">Published</dt>
+    <dd class="col-sm-12 col-md-9">@Model.Vacancy.Published</dd>
+
+    @{
+        DateTime startDate = (DateTime)Model.Vacancy.StartDate;
+        var formattedStartDate = startDate.ToString("dddd dd MMMM yyyy");
+
+        DateTime endDate = (DateTime)Model.Vacancy.EndDate;
+        var formattedEndDate = endDate.ToString("dddd dd MMMM yyyy");
+    }
+
+    <dt class="col-sm-12 col-md-3">Start date</dt>
+    <dd class="col-sm-12 col-md-9">@formattedStartDate</dd>
+
+    <dt class="col-sm-12 col-md-3">End date</dt>
+    <dd class="col-sm-12 col-md-9">@formattedEndDate</dd>
+</dl>
+
+<h2>Applications</h2>
+
+<p><strong>Total</strong>: @Model.NumberOfApplications</p>
+
+<a class="btn btn-primary" href="/admin/applications/@Model.Vacancy.Id">View Applications</a>

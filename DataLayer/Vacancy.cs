@@ -80,7 +80,7 @@ namespace DataLayer
 
         public List<VacancyModel> FindAll()
         {
-            const string query = @"select Id, JobTitle, JobDescription from dbo.Vacancy;";
+            const string query = @"select * from dbo.Vacancy;";
 
             var response = _sqlDataAccess.LoadData<VacancyModel, dynamic>(query, new { });
 
@@ -89,7 +89,7 @@ namespace DataLayer
 
         public List<VacancyModel> FindAllPublished()
         {
-            const string query = @"select Id, JobTitle, JobDescription from dbo.Vacancy where Published = 1;";
+            const string query = @"select * from dbo.Vacancy where Published = 1;";
 
             var response = _sqlDataAccess.LoadData<VacancyModel, dynamic>(query, new { });
 
@@ -98,7 +98,7 @@ namespace DataLayer
 
         public List<VacancyModel> FindAllDraft()
         {
-            const string query = @"select Id, JobTitle, JobDescription from dbo.Vacancy where Published = 0;";
+            const string query = @"select * from dbo.Vacancy where Published = 0;";
 
             var response = _sqlDataAccess.LoadData<VacancyModel, dynamic>(query, new { });
 
