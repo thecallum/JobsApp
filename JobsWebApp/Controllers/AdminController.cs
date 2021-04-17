@@ -29,11 +29,16 @@ namespace JobsWebApp.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var vacancyCrud = new VacancyCrud();
+            
+            var vacancy = await vacancyCrud.FindById(id);
+            if (vacancy == null)
+            {
+                Response.StatusCode = 404;
+                return View("VacancyNotFound");
+            }
+            
             var departmentCrud = new DepartmentCrud();
             var vacancyApplicationCrud = new ApplicationCrud();
-
-
-            var vacancy = await vacancyCrud.FindById(id);
 
             var viewModel = new DetailsViewModel
             {
@@ -136,11 +141,18 @@ namespace JobsWebApp.Controllers
         public async Task<IActionResult> Applications(int vacancyId, int applicantId = 0)
         {
             var vacancyCrud = new VacancyCrud();
+            var vacancy = await vacancyCrud.FindById(vacancyId);
+            if (vacancy == null)
+            {
+                Response.StatusCode = 404;
+                return View("VacancyNotFound");
+            }
+            
             var applicationCrud = new ApplicationCrud();
 
             var viewModel = new ApplicationsViewModel
             {
-                Vacancy = await vacancyCrud.FindById(vacancyId),
+                Vacancy = vacancy,
                 Applications = await applicationCrud.FindAll(vacancyId)
             };
 
