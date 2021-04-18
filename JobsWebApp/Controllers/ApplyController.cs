@@ -12,66 +12,56 @@ namespace JobsWebApp.Controllers
 {
     public class ApplyController : Controller
     {
+        private readonly VacancyCrud _vacancyCrud;
+        private readonly VacancyQuestionCrud _vacancyQuestionCrud;
+        private readonly EducationTypeCrud _educationTypeCrud;
+        private readonly ApplicationCrud _applicationCrud;
+        
+        public ApplyController()
+        {
+            _vacancyCrud = new VacancyCrud();
+            _vacancyQuestionCrud = new VacancyQuestionCrud(); 
+            _educationTypeCrud = new EducationTypeCrud();
+            _applicationCrud = new ApplicationCrud();
+        }
+        
         [HttpGet]
         public async Task<IActionResult> Create(int id)
         {
-            var vacancyCrud = new VacancyCrud();
-            var vacancy = await vacancyCrud.FindById(id);
-            if (vacancy == null)
-            {
-                Response.StatusCode = 404;
-                return View("VacancyNotFound");
-            }
+            var vacancy = await _vacancyCrud.FindById(id);
+            if (vacancy == null) return VacancyNotFound();
+
+            var customQuestions = await _vacancyQuestionCrud.FindAll(id);
             
-            
-            var educationTypes = await GetAllEducationTypes();
-
-            var vacancyQuestionsCrud = new VacancyQuestionCrud();
-
-            var customQuestions = await vacancyQuestionsCrud.FindAll(id);
-
-
             return View(new CreateViewModel
             {
                 Id = id,
-                EducationTypes = ConvertEducationTypesToSelectList(educationTypes),
+                EducationTypes = await ConvertEducationTypesToSelectList(),
                 Questions = customQuestions
             });
+        }
+
+        private IActionResult VacancyNotFound()
+        {
+            Response.StatusCode = 404;
+            return View("VacancyNotFound");
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(int id, CreateViewModel application)
         {
-            var vacancyCrud = new VacancyCrud();
-            var vacancy = await vacancyCrud.FindById(id);
-            if (vacancy == null)
-            {
-                Response.StatusCode = 404;
-                return View("VacancyNotFound");
-
-            }
+            var vacancy = await _vacancyCrud.FindById(id);
+            if (vacancy == null) return VacancyNotFound();
             
-            var vacancyQuestionsCrud = new VacancyQuestionCrud();
+            var customQuestions = await _vacancyQuestionCrud.FindAll(id);
 
-            var customQuestions = await vacancyQuestionsCrud.FindAll(id);
-
-            // extra validation
-            
-            
             if (!ModelState.IsValid)
             {
-                var educationTypes = await GetAllEducationTypes();
-
-                application.EducationTypes = ConvertEducationTypesToSelectList(educationTypes);
-
-
+                application.EducationTypes = await ConvertEducationTypesToSelectList();
                 application.Questions = customQuestions;
-
-
+                
                 return View(application);
             }
-
-            var applicationCrud = new ApplicationCrud();
 
             var vacancyApplication = new VacancyApplicationBaseModel
             {
@@ -118,7 +108,7 @@ namespace JobsWebApp.Controllers
 
             try
             {
-                await applicationCrud.InsertApplication(vacancyApplication, vacancyEducation, vacancyWorkHistory,
+                await _applicationCrud.InsertApplication(vacancyApplication, vacancyEducation, vacancyWorkHistory,
                     questionAnswers);
             }
             catch (Exception)
@@ -127,27 +117,17 @@ namespace JobsWebApp.Controllers
             }
 
             return RedirectToAction("Success");
-            //return NotFound();
         }
-
-
+        
         public IActionResult Success()
         {
             return View();
         }
-
-        private static async Task<List<EducationTypeBaseModel>> GetAllEducationTypes()
+        
+        private async Task<List<SelectListItem>> ConvertEducationTypesToSelectList()
         {
-            var educationTypeCrud = new EducationTypeCrud();
+            var educationTypes = await _educationTypeCrud.FindAll();
 
-            var educationTypes = await educationTypeCrud.FindAll();
-
-            return educationTypes;
-        }
-
-        private static List<SelectListItem> ConvertEducationTypesToSelectList(
-            List<EducationTypeBaseModel> educationTypes)
-        {
             return educationTypes.Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.Name}).ToList();
         }
     }

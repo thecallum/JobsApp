@@ -8,22 +8,46 @@ namespace JobsWebApp.ViewModels.Apply
 
         public int VacancyId { get; set; }
 
-        [Required] [MaxLength(50)] public string AddressLine1 { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string AddressLine1 { get; set; }
 
-        [MaxLength(50)] public string AddressLine2 { get; set; }
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string AddressLine2 { get; set; }
 
-        [MaxLength(50)] public string AddressLine3 { get; set; }
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string AddressLine3 { get; set; }
 
-        [MaxLength(50)] public string AddressLine4 { get; set; }
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string AddressLine4 { get; set; }
 
-        [Required] [MaxLength(50)] public string PostCode { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string PostCode { get; set; }
 
-        [Required] [MaxLength(50)] public string PhoneNumber { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string PhoneNumber { get; set; }
 
-        [Required] [MaxLength(50)] public string EmailAddress { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string EmailAddress { get; set; }
 
-        [Required] [MaxLength(50)] public string FirstName { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string FirstName { get; set; }
 
-        [Required] [MaxLength(50)] public string LastName { get; set; }
+        [Required] 
+        [MaxLength(50)] 
+        [Display(Name = "Note ID")]
+        public string LastName { get; set; }
     }
 }
