@@ -1,15 +1,31 @@
 ﻿@model DataLayer.BaseModels.VacancyBaseModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = $@"Details - {Model.JobTitle}";
 }
 
-<h1>Details</h1>
+<h1>@Model.JobTitle</h1>
 
-<p><strong>Job title</strong>: @Model.JobTitle</p>
-<p><strong>Description</strong>: @Model.JobDescription</p>
-<p><strong>Salary range</strong>: £@Model.SalaryMin - £@Model.SalaryMax</p>
-<p><strong>Contract type</strong>: @Model.ContractType</p>
-<p><strong>Closing Date</strong>: @Model.EndDate</p>
+<dl class="row">
+    <dt class="col-sm-12 col-md-3">Salary range</dt>
+    <dd class="col-sm-12 col-md-9">£@Model.SalaryMin - £@Model.SalaryMax</dd>
 
-<a href="/apply/create/@Model.Id">Apply</a>
+    <dt class="col-sm-12 col-md-3">Contract type</dt>
+    <dd class="col-sm-12 col-md-9">@Model.ContractType</dd>
+    
+      @{
+          var endDate = (DateTime) Model.EndDate;
+          var formattedEndDate = endDate.ToString("dddd dd MMMM yyyy");
+      }
+      
+    <dt class="col-sm-12 col-md-3">Closing date</dt>
+    <dd class="col-sm-12 col-md-9">@formattedEndDate</dd>
+</dl>
+
+
+<h3>Job Description</h3>
+<div>
+    @Html.Raw(Model.JobDescription);
+</div>
+
+<a href="/apply/create/@Model.Id" class="btn btn-primary">Apply</a>

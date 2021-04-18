@@ -55,6 +55,9 @@ namespace JobsWebApp.Controllers
 
             var customQuestions = await vacancyQuestionsCrud.FindAll(id);
 
+            // extra validation
+            
+            
             if (!ModelState.IsValid)
             {
                 var educationTypes = await GetAllEducationTypes();

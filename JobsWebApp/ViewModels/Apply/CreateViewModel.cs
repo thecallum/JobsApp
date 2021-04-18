@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using DataLayer.BaseModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -21,4 +23,6 @@ namespace JobsWebApp.ViewModels.Apply
 
         public List<VacancyCustomQuestionAnswerViewModel> Answers { get; set; }
     }
+
+    
 }

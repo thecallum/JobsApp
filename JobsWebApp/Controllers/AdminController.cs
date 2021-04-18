@@ -111,7 +111,7 @@ namespace JobsWebApp.Controllers
                 SalaryMin = viewModel.Vacancy.SalaryMin,
                 SalaryMax = viewModel.Vacancy.SalaryMax,
                 SalaryRangeId = (int) viewModel.SalaryRange,
-                // DepartmentId = (int) viewModel.Department,
+                DepartmentId = (int) viewModel.Department,
                 ContractType = viewModel.Vacancy.ContractType,
                 StartDate = viewModel.Vacancy.StartDate,
                 EndDate = viewModel.Vacancy.EndDate,
@@ -132,7 +132,7 @@ namespace JobsWebApp.Controllers
 
             var vacancyCrud = new VacancyCrud();
 
-            var vacancyId = vacancyCrud.Insert(vacancyModel, questionModels);
+            var vacancyId = await vacancyCrud.Insert(vacancyModel, questionModels);
 
             return Redirect($"/admin/details/{vacancyId}");
         }

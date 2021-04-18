@@ -37,9 +37,6 @@
     <dt class="col-sm-12 col-md-3">Job title</dt>
     <dd class="col-sm-12 col-md-9">@Model.VacancyBase.JobTitle</dd>
 
-    <dt class="col-sm-12 col-md-3">Description</dt>
-    <dd class="col-sm-12 col-md-9">@Model.VacancyBase.JobDescription</dd>
-
     <dt class="col-sm-12 col-md-3">Salary range</dt>
     <dd class="col-sm-12 col-md-9">£@Model.VacancyBase.SalaryMin - £@Model.VacancyBase.SalaryMax</dd>
 
@@ -66,6 +63,11 @@
     <dt class="col-sm-12 col-md-3">End date</dt>
     <dd class="col-sm-12 col-md-9">@formattedEndDate</dd>
 </dl>
+
+<h3>Job Description</h3>
+<div>
+    @Html.Raw(Model.VacancyBase.JobDescription);
+</div>
 
 <h2>Applications</h2>
 
