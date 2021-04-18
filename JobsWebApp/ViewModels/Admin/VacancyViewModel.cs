@@ -11,7 +11,7 @@ namespace JobsWebApp.ViewModels.Admin
         [Required] 
         [Display(Name = "Job Title")]
         [MaxLength(50)]
-        [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
+        [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Only letters and numbers allowed.")]
         public string JobTitle { get; set; }
 
         [Required] 
@@ -31,7 +31,7 @@ namespace JobsWebApp.ViewModels.Admin
 
         [Required] 
         [Display(Name = "Contract Type")]
-        [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
+        [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Only letters and numbers allowed.")]
         [MaxLength(50)]
         public string ContractType { get; set; }
 

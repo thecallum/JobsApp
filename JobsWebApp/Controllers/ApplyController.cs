@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DataLayer.BaseModels;
 using DataLayer.Crud;
+using Ganss.XSS;
 using JobsWebApp.ViewModels.Apply;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,6 +17,8 @@ namespace JobsWebApp.Controllers
         private readonly VacancyQuestionCrud _vacancyQuestionCrud;
         private readonly EducationTypeCrud _educationTypeCrud;
         private readonly ApplicationCrud _applicationCrud;
+
+        private readonly HtmlSanitizer _htmlSanitizer;
         
         public ApplyController()
         {
@@ -23,6 +26,8 @@ namespace JobsWebApp.Controllers
             _vacancyQuestionCrud = new VacancyQuestionCrud(); 
             _educationTypeCrud = new EducationTypeCrud();
             _applicationCrud = new ApplicationCrud();
+
+            _htmlSanitizer = new HtmlSanitizer();
         }
         
         [HttpGet]
@@ -65,23 +70,23 @@ namespace JobsWebApp.Controllers
 
             var vacancyApplication = new VacancyApplicationBaseModel
             {
-                FirstName = application.VacancyApplication.FirstName,
-                LastName = application.VacancyApplication.LastName,
-                AddressLine1 = application.VacancyApplication.AddressLine1,
-                AddressLine2 = application.VacancyApplication.AddressLine2,
-                AddressLine3 = application.VacancyApplication.AddressLine3,
-                AddressLine4 = application.VacancyApplication.AddressLine4,
-                PostCode = application.VacancyApplication.PostCode,
-                PhoneNumber = application.VacancyApplication.PhoneNumber,
-                EmailAddress = application.VacancyApplication.EmailAddress,
+                FirstName = _htmlSanitizer.Sanitize(application.VacancyApplication.FirstName),
+                LastName = _htmlSanitizer.Sanitize(application.VacancyApplication.LastName),
+                AddressLine1 = _htmlSanitizer.Sanitize(application.VacancyApplication.AddressLine1),
+                AddressLine2 = _htmlSanitizer.Sanitize(application.VacancyApplication.AddressLine2),
+                AddressLine3 = _htmlSanitizer.Sanitize(application.VacancyApplication.AddressLine3),
+                AddressLine4 = _htmlSanitizer.Sanitize(application.VacancyApplication.AddressLine4),
+                PostCode = _htmlSanitizer.Sanitize(application.VacancyApplication.PostCode),
+                PhoneNumber = _htmlSanitizer.Sanitize(application.VacancyApplication.PhoneNumber),
+                EmailAddress = _htmlSanitizer.Sanitize(application.VacancyApplication.EmailAddress),
                 VacancyId = id
             };
 
             var vacancyEducation = application.Education.Select(educationViewModel => new VacancyEducationBaseModel
-                {
-                    EducationTypeId = educationViewModel.EducationTypeId, Description = educationViewModel.Description
-                })
-                .ToList();
+            {
+                EducationTypeId = educationViewModel.EducationTypeId,
+                Description = _htmlSanitizer.Sanitize(educationViewModel.Description),
+            }).ToList();
 
             var vacancyWorkHistory = new List<WorkHistoryBaseModel>();
 
@@ -89,9 +94,9 @@ namespace JobsWebApp.Controllers
                 vacancyWorkHistory.Add(
                     new WorkHistoryBaseModel
                     {
-                        Summary = workHistory.Summary,
-                        EmployerName = workHistory.EmployerName,
-                        JobTitle = workHistory.JobTitle,
+                        Summary = _htmlSanitizer.Sanitize(workHistory.Summary),
+                        EmployerName = _htmlSanitizer.Sanitize(workHistory.EmployerName),
+                        JobTitle = _htmlSanitizer.Sanitize(workHistory.JobTitle),
                         StartDate = workHistory.StartDate,
                         EndDate = workHistory.EndDate
                     });
@@ -102,7 +107,7 @@ namespace JobsWebApp.Controllers
             for (var i = 0; i < customQuestions.Count; i++)
                 questionAnswers.Add(new VacancyQuestionAnswerBaseModel
                 {
-                    Answer = application.Answers[i].Answer,
+                    Answer = _htmlSanitizer.Sanitize(application.Answers[i].Answer),
                     VacancyCustomQuestionId = customQuestions[i].Id
                 });
 
