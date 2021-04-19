@@ -16,28 +16,44 @@ namespace DataLayer.Crud
 
             if (salaryRange != null && department != null)
                 query = @"select * from dbo.Vacancy
-                    where SalaryRangeId = @SalaryRangeId and DepartmentId = @DepartmentId and Published = 1
+                    where 
+                        SalaryRangeId = @SalaryRangeId and 
+                        DepartmentId = @DepartmentId and 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1
                     Order by id
                     offset @Offset rows
                     fetch next @PageSize rows only;
                 ";
             else if (salaryRange != null)
                 query = @"select * from dbo.Vacancy
-                    where SalaryRangeId = @SalaryRangeId and Published = 1
+                    where 
+                        SalaryRangeId = @SalaryRangeId and 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1
                     Order by id
                     offset @Offset rows
                     fetch next @PageSize rows only;
                 ";
             else if (department != null)
                 query = @"select * from dbo.Vacancy
-                    where DepartmentId = @DepartmentId and Published = 1
+                    where 
+                        DepartmentId = @DepartmentId and 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1
                     Order by id
                     offset @Offset rows
                     fetch next @PageSize rows only;
                 ";
             else
                 query = @"select * from dbo.Vacancy
-                    where Published = 1
+                    where 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1
                     Order by id
                     offset @Offset rows
                     fetch next @PageSize rows only;
