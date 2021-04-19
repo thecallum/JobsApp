@@ -77,17 +77,6 @@
             @Html.ValidationMessageFor(model => model.Vacancy.Published, "", new {@class = "text-danger"})
         </div>
 
-
-        <div class="form-group">
-            <label for="salaryRangeSelect">Salary Range</label>
-            <select class="select form-control" asp-for="SalaryRange" asp-items="Model.SalaryRanges" id="salaryRangeSelect">
-                <option value="">SalaryRange</option>
-            </select>
-            @Html.ValidationMessageFor(model => model.SalaryRange, "", new {@class = "text-danger"})
-
-        </div>
-
-
         <div class="form-group">
             <label for="departmentSelect">Department</label>
             <select class="select form-control" asp-for="Department" asp-items="Model.Departments" id="departmentSelect">

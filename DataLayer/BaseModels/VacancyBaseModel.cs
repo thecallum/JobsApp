@@ -9,7 +9,6 @@ namespace DataLayer.BaseModels
         public string JobDescription { get; set; }
         public int SalaryMin { get; set; }
         public int SalaryMax { get; set; }
-        public int SalaryRangeId { get; set; }
         public int DepartmentId { get; set; }
         public string ContractType { get; set; }
         public DateTime? StartDate { get; set; }

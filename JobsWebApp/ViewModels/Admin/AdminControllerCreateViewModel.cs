@@ -10,10 +10,6 @@ namespace JobsWebApp.ViewModels.Admin
 
         public List<SelectListItem> Departments { get; set; }
 
-        public List<SelectListItem> SalaryRanges { get; set; }
-
-        [Required] public int? SalaryRange { get; set; }
-
         [Required] public int? Department { get; set; }
 
         public List<CustomQuestionViewModel> Questions { get; set; } = new()

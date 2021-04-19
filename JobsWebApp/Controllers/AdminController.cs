@@ -82,7 +82,6 @@ namespace JobsWebApp.Controllers
             var viewModel = new AdminControllerCreateViewModel
             {
                 Departments = await LoadDepartmentSelectList(),
-                SalaryRanges = await LoadSalaryRangeSelectList()
             };
 
             return View(viewModel);
@@ -94,7 +93,6 @@ namespace JobsWebApp.Controllers
             if (ModelState.IsValid == false)
             {
                 viewModel.Departments = await LoadDepartmentSelectList();
-                viewModel.SalaryRanges = await LoadSalaryRangeSelectList();
 
                 return View(viewModel);
             }
@@ -107,7 +105,6 @@ namespace JobsWebApp.Controllers
                 JobDescription = _htmlSanitizer.Sanitize(viewModel.Vacancy.JobDescription),
                 SalaryMin = (int)viewModel.Vacancy.SalaryMin,
                 SalaryMax = (int)viewModel.Vacancy.SalaryMax,
-                SalaryRangeId = (int) viewModel.SalaryRange,
                 DepartmentId = (int) viewModel.Department,
                 ContractType = _htmlSanitizer.Sanitize(viewModel.Vacancy.ContractType),
                 StartDate = viewModel.Vacancy.StartDate,
@@ -159,14 +156,6 @@ namespace JobsWebApp.Controllers
 
             return departments.Select(x => new SelectListItem
                 {Value = x.Id.ToString(), Text = x.DepartmentName}).ToList();
-        }
-        
-        private async Task<List<SelectListItem>> LoadSalaryRangeSelectList()
-        {
-            var salaryRange = await _salaryRangeCrud.FindAll();
-
-            return salaryRange
-                .Select(x => new SelectListItem {Value = x.Id.ToString(), Text = x.DisplayValue}).ToList();
         }
     }
 }

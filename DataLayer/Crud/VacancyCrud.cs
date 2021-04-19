@@ -7,32 +7,43 @@ namespace DataLayer.Crud
 {
     public class VacancyCrud : BaseCrud
     {
-        public async Task<List<VacancyBaseModel>> FindWithFilters(int page = 1, int? salaryRange = null,
+        public async Task<List<VacancyBaseModel>> FindWithFilters(int page = 1, int? salaryRangeId = null,
             int? department = null)
         {
             const int pageSize = 10;
 
+
             string query;
 
-            if (salaryRange != null && department != null)
+            if (salaryRangeId != null && department != null)
+            {
                 query = @"select * from dbo.Vacancy
-                    where 
-                        SalaryRangeId = @SalaryRangeId and 
+                     where
                         DepartmentId = @DepartmentId and 
                         StartDate <= CAST( GETDATE() AS Date ) and
                         EndDate >= CAST( GETDATE() AS Date ) and
-                        Published = 1
+                        Published = 1 and
+                        (
+                            (SalaryMin >= @SalaryRangeMin and SalaryMin <= @SalaryRangeMax) or
+                            (SalaryMax >= @SalaryRangeMin and SalaryMax <= @SalaryRangeMax) or
+                            (SalaryMin <= @SalaryRangeMin and SalaryMax >= @SalaryRangeMax)
+                        )
                     Order by id
                     offset @Offset rows
                     fetch next @PageSize rows only;
                 ";
-            else if (salaryRange != null)
+            }
+            else if (salaryRangeId != null)
                 query = @"select * from dbo.Vacancy
                     where 
-                        SalaryRangeId = @SalaryRangeId and 
                         StartDate <= CAST( GETDATE() AS Date ) and
                         EndDate >= CAST( GETDATE() AS Date ) and
-                        Published = 1
+                        Published = 1 and 
+                        (
+                            (SalaryMin >= @SalaryRangeMin and SalaryMin <= @SalaryRangeMax) or
+                            (SalaryMax >= @SalaryRangeMin and SalaryMax <= @SalaryRangeMax) or
+                            (SalaryMin <= @SalaryRangeMin and SalaryMax >= @SalaryRangeMax)
+                        )
                     Order by id
                     offset @Offset rows
                     fetch next @PageSize rows only;
@@ -59,14 +70,30 @@ namespace DataLayer.Crud
                     fetch next @PageSize rows only;
                 ";
 
+            int salaryRangeMin = 0; // default values (not used if not in query)
+            int salaryRangeMax = 0;
+
+
+            if (salaryRangeId != null)
+            {
+                var salaryRangeCrud = new SalaryRangeCrud();
+                var salaryRange = await salaryRangeCrud.Find((int)salaryRangeId);
+
+                salaryRangeMin = salaryRange.MinAmount;
+                salaryRangeMax = salaryRange.MaxAmount;
+            }
 
             var parameters = new
             {
-                SalaryRangeId = salaryRange,
                 DepartmentId = department,
                 Offset = (page - 1) * pageSize,
-                PageSize = pageSize
+                PageSize = pageSize,
+
+                SalaryRangeMin = salaryRangeMin,
+                SalaryRangeMax = salaryRangeMax
             };
+
+           
 
             var response = await SqlDataAccess.LoadData<VacancyBaseModel, dynamic>(query, parameters);
 
@@ -113,9 +140,9 @@ namespace DataLayer.Crud
         public async Task<int> Insert(VacancyBaseModel vacancy, IEnumerable<VacancyQuestionBaseModel> questions)
         {
             const string query = @"insert into dbo.Vacancy 
-                (JobTitle, JobDescription, SalaryMin, SalaryMax, SalaryRangeId, DepartmentId, ContractType, StartDate, EndDate, Published)
+                (JobTitle, JobDescription, SalaryMin, SalaryMax, DepartmentId, ContractType, StartDate, EndDate, Published)
                 output Inserted.ID
-                values (@JobTitle, @JobDescription, @SalaryMin, @SalaryMax, @SalaryRangeId, @DepartmentId, @ContractType, @StartDate, @EndDate, @Published);
+                values (@JobTitle, @JobDescription, @SalaryMin, @SalaryMax, @DepartmentId, @ContractType, @StartDate, @EndDate, @Published);
             ";
 
             var parameters = new
@@ -124,7 +151,6 @@ namespace DataLayer.Crud
                 vacancy.JobDescription,
                 vacancy.SalaryMin,
                 vacancy.SalaryMax,
-                vacancy.SalaryRangeId,
                 vacancy.DepartmentId,
                 vacancy.ContractType,
                 vacancy.StartDate,
