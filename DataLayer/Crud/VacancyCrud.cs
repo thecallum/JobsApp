@@ -8,67 +8,11 @@ namespace DataLayer.Crud
     public class VacancyCrud : BaseCrud
     {
         public async Task<List<VacancyBaseModel>> FindWithFilters(int page = 1, int? salaryRangeId = null,
-            int? department = null)
+            int? departmentId = null)
         {
             const int pageSize = 10;
 
-
-            string query;
-
-            if (salaryRangeId != null && department != null)
-            {
-                query = @"select * from dbo.Vacancy
-                     where
-                        DepartmentId = @DepartmentId and 
-                        StartDate <= CAST( GETDATE() AS Date ) and
-                        EndDate >= CAST( GETDATE() AS Date ) and
-                        Published = 1 and
-                        (
-                            (SalaryMin >= @SalaryRangeMin and SalaryMin <= @SalaryRangeMax) or
-                            (SalaryMax >= @SalaryRangeMin and SalaryMax <= @SalaryRangeMax) or
-                            (SalaryMin <= @SalaryRangeMin and SalaryMax >= @SalaryRangeMax)
-                        )
-                    Order by id
-                    offset @Offset rows
-                    fetch next @PageSize rows only;
-                ";
-            }
-            else if (salaryRangeId != null)
-                query = @"select * from dbo.Vacancy
-                    where 
-                        StartDate <= CAST( GETDATE() AS Date ) and
-                        EndDate >= CAST( GETDATE() AS Date ) and
-                        Published = 1 and 
-                        (
-                            (SalaryMin >= @SalaryRangeMin and SalaryMin <= @SalaryRangeMax) or
-                            (SalaryMax >= @SalaryRangeMin and SalaryMax <= @SalaryRangeMax) or
-                            (SalaryMin <= @SalaryRangeMin and SalaryMax >= @SalaryRangeMax)
-                        )
-                    Order by id
-                    offset @Offset rows
-                    fetch next @PageSize rows only;
-                ";
-            else if (department != null)
-                query = @"select * from dbo.Vacancy
-                    where 
-                        DepartmentId = @DepartmentId and 
-                        StartDate <= CAST( GETDATE() AS Date ) and
-                        EndDate >= CAST( GETDATE() AS Date ) and
-                        Published = 1
-                    Order by id
-                    offset @Offset rows
-                    fetch next @PageSize rows only;
-                ";
-            else
-                query = @"select * from dbo.Vacancy
-                    where 
-                        StartDate <= CAST( GETDATE() AS Date ) and
-                        EndDate >= CAST( GETDATE() AS Date ) and
-                        Published = 1
-                    Order by id
-                    offset @Offset rows
-                    fetch next @PageSize rows only;
-                ";
+            var query = GenerateVacancyFilterQuery(salaryRangeId, departmentId);
 
             int salaryRangeMin = 0; // default values (not used if not in query)
             int salaryRangeMax = 0;
@@ -85,7 +29,7 @@ namespace DataLayer.Crud
 
             var parameters = new
             {
-                DepartmentId = department,
+                DepartmentId = departmentId,
                 Offset = (page - 1) * pageSize,
                 PageSize = pageSize,
 
@@ -179,6 +123,74 @@ namespace DataLayer.Crud
             };
 
             await SqlDataAccess.UpdateData<dynamic>(query, parameters);
+        }
+
+        private static string GenerateVacancyFilterQuery(int? salaryRangeId, int? departmentId)
+        {
+            // Includes salary range and department filters
+            if (salaryRangeId != null && departmentId != null)
+            {
+                return @"select * from dbo.Vacancy
+                     where
+                        DepartmentId = @DepartmentId and 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1 and
+                        (
+                            (SalaryMin >= @SalaryRangeMin and SalaryMin <= @SalaryRangeMax) or
+                            (SalaryMax >= @SalaryRangeMin and SalaryMax <= @SalaryRangeMax) or
+                            (SalaryMin <= @SalaryRangeMin and SalaryMax >= @SalaryRangeMax)
+                        )
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
+            }
+
+            // only includes salary range filter
+            if (salaryRangeId != null)
+            {
+                return @"select * from dbo.Vacancy
+                    where 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1 and 
+                        (
+                            (SalaryMin >= @SalaryRangeMin and SalaryMin <= @SalaryRangeMax) or
+                            (SalaryMax >= @SalaryRangeMin and SalaryMax <= @SalaryRangeMax) or
+                            (SalaryMin <= @SalaryRangeMin and SalaryMax >= @SalaryRangeMax)
+                        )
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
+            }
+
+            // only includes department filter
+            if (departmentId != null)
+            {
+                return @"select * from dbo.Vacancy
+                    where 
+                        DepartmentId = @DepartmentId and 
+                        StartDate <= CAST( GETDATE() AS Date ) and
+                        EndDate >= CAST( GETDATE() AS Date ) and
+                        Published = 1
+                    Order by id
+                    offset @Offset rows
+                    fetch next @PageSize rows only;
+                ";
+            }
+
+            // defalt query with no filters
+            return @"select * from dbo.Vacancy
+                where 
+                    StartDate <= CAST( GETDATE() AS Date ) and
+                    EndDate >= CAST( GETDATE() AS Date ) and
+                    Published = 1
+                Order by id
+                offset @Offset rows
+                fetch next @PageSize rows only;
+            ";
         }
     }
 }
