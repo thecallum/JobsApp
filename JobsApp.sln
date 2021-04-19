@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobsWebApp", "JobsWebApp\JobsWebApp.csproj", "{6EB53C07-9702-4171-89C6-0147458B40CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JobsWebApp", "JobsWebApp\JobsWebApp.csproj", "{6EB53C07-9702-4171-89C6-0147458B40CF}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLDatabase", "SQLDatabase\SQLDatabase.sqlproj", "{B7FC0943-46B7-4EFB-BB70-34FDCC0FB80F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{7DCC540A-51FA-4B08-B435-755CEC3C65E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{7DCC540A-51FA-4B08-B435-755CEC3C65E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{BA5EB267-B536-4BFD-9C60-90C9803CB7A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{7DCC540A-51FA-4B08-B435-755CEC3C65E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DCC540A-51FA-4B08-B435-755CEC3C65E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DCC540A-51FA-4B08-B435-755CEC3C65E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5EB267-B536-4BFD-9C60-90C9803CB7A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5EB267-B536-4BFD-9C60-90C9803CB7A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5EB267-B536-4BFD-9C60-90C9803CB7A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5EB267-B536-4BFD-9C60-90C9803CB7A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
